@@ -10,5 +10,11 @@
   "permissions": ["storage", "activeTab", "scripting", "tabs"],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["banner.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
