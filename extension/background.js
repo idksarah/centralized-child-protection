@@ -1,4 +1,5 @@
 const MAX_URLS = 10;
+var keyHistory = "";
 
 /**
 * Adds a url to the url history. Makes a list size max of MAX_URLS 
@@ -83,6 +84,11 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
       urlList,
     });
     console.log("FOUND CHAIRMAN YAYAYA background.js btw")
+  }
+  else if (msg.type == 'KEYPRESS') {
+    const key = msg.key;
+    keyHistory = keyHistory + key
+    console.log("Key history is: ", keyHistory)
   }
 });
 
