@@ -15,27 +15,37 @@ readBtn.addEventListener("click", async () => {
   }
 });
 /**
-* Stores a score to the local storage.
-* @async
-* @function save_score
-* @param {number|string} new_score - The new score to be saved.
-* @returns {Promise<void>}
-*/
+ * Stores a score to the local storage.
+ * @async
+ * @function save_score
+ * @param {number|string} new_score - The new score to be saved.
+ * @returns {Promise<void>}
+ */
 async function save_score(new_score) {
   const value = parseFloat(new_score);
   chrome.storage.local.set({ savedNumber: value }, () => {
     status.textContent = `Saved number: ${value}`;
   });
+  get_url();
 }
 /**
-* Reads the saved score value from Chrome's local storage.
-* @async
-* @function read_score
-* @returns {Promise<number|undefined>}
-*/
+ * Reads the saved score value from Chrome's local storage.
+ * @async
+ * @function read_score
+ * @returns {Promise<number|undefined>}
+ */
 async function read_score() {
   const result = await chrome.storage.local.get(["savedNumber"]);
   if (result.savedNumber !== undefined) {
     return result.savedNumber;
   }
+}
+/**
+ * Reads url
+ * @async
+ * @function get_url
+ * @returns {Promise<string>}
+ */
+function get_url() {
+  console.log("Current URL:", window.location.href);
 }
