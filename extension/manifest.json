@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Centralized Child Protection",
+  "version": "0.0",
+  "description": "Protects your children",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {}
+  },
+  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
