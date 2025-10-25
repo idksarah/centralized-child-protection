@@ -1,4 +1,5 @@
-const MAX_URLS = 10;
+import { saveUrl, readUrlList, saveSocialCredit, readSocialCredit} from './data.js';
+
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   const tab = await chrome.tabs.get(activeInfo.tabId);
   saveUrl(tab.url)
@@ -13,32 +14,19 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   }
 });
 
-/**
- * Adds a url to the url history. Makes a list size max of MAX_URLS 
- * @async
- * @function saveUrl
- * @param {string} url - The new url to be appended.
- * @returns {Promise<void>}
- */
-async function saveUrl(url) {
-  const result = await chrome.storage.local.get({ urlList: [] });
-  const urlList = result.urlList;
-  urlList.push(url);
-  if (urlList.length > MAX_URLS) {
-    urlList.shift();
+
+
+// Checks for the chairman website
+chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
+  if (msg.isChairmanWebsite) {
+    const socialCredit = await readSocialCredit();
+    const urlList = await readUrlList();
+    
+    chrome.tabs.sendMessage(tabId, {
+      socialCredit,
+      urlList,
+    });
+    console.log("FOUND CHAIRMAN YAYAYA background.js btw")
   }
-  await chrome.storage.local.set({ urlList });
-  console.log("Saved URL:", url, "| Total URLs stored:", urlList.length);
-  const list = await readUrl();
-  console.log("Saved URLs: ", list)
-}
-/**
- * Gives the stored url list
- * @async
- * @function readUrl
- * @returns {Promise<string[]>}
- */
-async function readUrl() {
-  const result = await chrome.storage.local.get({ urlList: [] });
-  return result;
-}
+});
+

@@ -1,5 +1,6 @@
 import { createSignal } from 'solid-js'
 import { render } from 'solid-js/web';
+import { getExtensionData } from './getExtensionData';
 import { fetchGPTResponse } from './FetchGPTResponse';
 import './App.css'
 
@@ -12,10 +13,14 @@ export default function App() {
 
   const [loading, setLoading] = createSignal(false);
   
+  // EXTENSION DATA YAYAYA
+  const { socialCreditScore, urlList,  isLoaded } = getExtensionData();
+  
   async function getResponse() {
     setLoading(true);
-
-    const response = await fetchGPTResponse(userInput());
+    
+    const response = await fetchGPTResponse(userInput(), socialCreditScore(), urlList());
+    // const response = await fetchGPTResponse(userInput());
     setWrapperResponse(response);
     setLoading(false);
   }
