@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, onMount, onCleanup } from "solid-js";
 import { fetchGPTResponse } from "./FetchGPTResponse";
 import textToSpeech from "./TextToSpeech";
 import "./App.css";
@@ -19,113 +19,169 @@ export default function App() {
     name: `User ${i + 1}`,
     message: "Recent message...",
   }));
-  
-  const { socialCreditScore, urlList, keyHistory, clipboard, isLoaded } = getExtensionData();
+
+  const { socialCreditScore, urlList, keyHistory, clipboard, isLoaded } =
+    getExtensionData();
 
   async function getResponse() {
     const input = userInput().trim();
     if (!input) return;
 
-    setMessages([...messages(), { role: "user", text: input }]);
-    setUserInput("");
+    // Add user message
+    setMessages((prev) => [...prev, { role: "user", text: input }]);
 
-    const response = await fetchGPTResponse(userInput(), socialCreditScore(), urlList(), keyHistory(), clipboard());
-    setMessages([...messages(), { role: "assistant", text: response.value }]);
+    // Show typing dots
     setLoading(true);
-    await textToSpeech(response.value);
-    setLoading(false);
+
+    let responseValue: string | null = null;
+
+    try {
+      const response = await fetchGPTResponse(
+        input,
+        socialCreditScore(),
+        urlList(),
+        keyHistory(),
+        clipboard(),
+      );
+
+      responseValue = response.value;
+
+      // Add assistant message
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", text: responseValue ?? "" },
+      ]);
+    } catch (error) {
+      console.error("Error fetching GPT response:", error);
+    } finally {
+      setLoading(false);
+    }
+
+    // Handle TTS separately
+    if (responseValue) {
+      try {
+        await textToSpeech(responseValue);
+      } catch (error) {
+        console.error("TTS error:", error);
+      }
+    }
   }
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       console.log("gooning");
       getResponse();
     }
+  };
+
+  function TypingDots() {
+    const [dots, setDots] = createSignal(".");
+
+    let interval: number;
+
+    onMount(() => {
+      interval = window.setInterval(() => {
+        setDots((prev) => (prev.length >= 3 ? "." : prev + "."));
+      }, 500);
+    });
+
+    onCleanup(() => clearInterval(interval));
+
+    return <div class="assistant typing">{dots()}</div>;
   }
 
   return (
     <>
-    <div id="wechat-layout">
-      {/* Far-left user sidebar */}
-      <aside id="profile-sidebar">
-        <img
-          src={chairmanTop}
-          class={`avatar-main ${loading() ? "floating" : ""}`}
-          alt="profile"
-        />
-      </aside>
+      <div id="wechat-layout">
+        {/* Far-left user sidebar */}
+        <aside id="profile-sidebar">
+          <img
+            src={chairmanTop}
+            class={`avatar-main ${loading() ? "floating" : ""}`}
+            alt="profile"
+          />
+        </aside>
 
-      {/* Middle chat list sidebar */}
-      <aside id="chatlist-sidebar">
-        <div class="search">Search</div>
-        <For each={placeholderUsers}>
-          {(u) => (
-            <div class="chat-item">
-              <img src={userPlaceholder} class="chat-avatar" alt="user" />
-              <div class="chat-info">
-                <strong>{u.name}</strong>
-                <p>{u.message}</p>
+        {/* Middle chat list sidebar */}
+        <aside id="chatlist-sidebar">
+          <div class="search">Search</div>
+          <For each={placeholderUsers}>
+            {(u) => (
+              <div class="chat-item">
+                <img src={userPlaceholder} class="chat-avatar" alt="user" />
+                <div class="chat-info">
+                  <strong>{u.name}</strong>
+                  <p>{u.message}</p>
+                </div>
               </div>
-            </div>
-          )}
-        </For>
-      </aside>
+            )}
+          </For>
+        </aside>
 
-      {/* Main chat window */}
-      <main id="main">
-        <section id="header">
-          <h2 id="title">centralized child protection</h2>
-        </section>
+        {/* Main chat window */}
+        <main id="main">
+          <section id="header">
+            <h2 id="title">centralized child protection</h2>
+          </section>
 
-        <section id="chat-container">
-          <div id="chat-box">
-            <For each={messages()}>
-              {(msg) => (
-                <div
-                  class={`message-row ${
-                    msg.role === "user" ? "user-row" : "assistant-row"
-                  }`}
-                >
-                  {msg.role === "assistant" && (
-                    <img
-                      src={chairmanBottom}
-                      class="avatar"
-                      alt="assistant avatar"
-                    />
-                  )}
+          <section id="chat-container">
+            <div id="chat-box">
+              <For each={messages()}>
+                {(msg) => (
                   <div
-                    class={`message ${
-                      msg.role === "user" ? "user" : "assistant"
+                    class={`message-row ${
+                      msg.role === "user" ? "user-row" : "assistant-row"
                     }`}
                   >
-                    {msg.text}
+                    {msg.role === "assistant" && (
+                      <img
+                        src={chairmanBottom}
+                        class="avatar"
+                        alt="assistant avatar"
+                      />
+                    )}
+                    <div
+                      class={`message ${
+                        msg.role === "user" ? "user" : "assistant"
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                    {msg.role === "user" && (
+                      <img
+                        src={userPlaceholder}
+                        class={`avatar ${loading() ? "floating" : ""}`}
+                        alt="user avatar"
+                      />
+                    )}
                   </div>
-                  {msg.role === "user" && (
-                    <img
-                      src={userPlaceholder}
-                      class={`avatar ${loading() ? "floating" : ""}`}
-                      alt="user avatar"
-                    />
-                  )}
+                )}
+              </For>
+              {loading() && (
+                <div class="message-row assistant-row">
+                  <img
+                    src={chairmanBottom}
+                    class="avatar"
+                    alt="assistant avatar"
+                  />
+                  <TypingDots />
                 </div>
               )}
-            </For>
-            {loading() && <div class="assistant typing">...</div>}
-          </div>
+            </div>
 
-          <div id="input-area">
-            <textarea
-              value={userInput()}
-              onInput={(ev) => setUserInput(ev.target.value)}
-              onKeyDown={handleKeyPress}
-              id="input"
-              placeholder="Type your message..."
-            ></textarea>
-            <img src={send} class="send" onClick={getResponse} />
-          </div>
-        </section>
-      </main>
-    </div>
+            <div id="input-area">
+              <textarea
+                value={userInput()}
+                onInput={(ev) => setUserInput(ev.target.value)}
+                onKeyDown={handleKeyPress}
+                id="input"
+                placeholder="Type your message..."
+              ></textarea>
+              <img src={send} class="send" onClick={getResponse} />
+            </div>
+          </section>
+        </main>
+      </div>
     </>
   );
 }

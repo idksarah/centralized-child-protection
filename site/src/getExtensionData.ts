@@ -12,7 +12,7 @@ export function getExtensionData() {
   const [socialCreditScore, setSocialCreditScore] = createSignal(0);
   const [urlList, setUrlList] = createSignal<string[]>([]);
   const [keyHistory, setKeyHistory] = createSignal<string>("");
-  const [clipboard, setClipboard] = createSignal<string | null>(null);
+  const [clipboard, setClipboard] = createSignal<string>("");
   const [isLoaded, setIsLoaded] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
 
