@@ -40,3 +40,5 @@ async function read_score() {
     return result.savedNumber;
   }
 }
+
+// function updateScoreUI() {}
