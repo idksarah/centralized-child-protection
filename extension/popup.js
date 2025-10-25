@@ -40,12 +40,3 @@ async function read_score() {
     return result.savedNumber;
   }
 }
-/**
- * Reads url
- * @async
- * @function get_url
- * @returns {Promise<string>}
- */
-function get_url() {
-  console.log("Current URL:", window.location.href);
-}
