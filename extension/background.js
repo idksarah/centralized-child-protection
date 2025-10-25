@@ -1,5 +1,6 @@
 const MAX_URLS = 10;
 var keyHistory = "";
+var clipboard = "";
 
 /**
 * Adds a url to the url history. Makes a list size max of MAX_URLS 
@@ -72,9 +73,12 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 // Fired when a tab updates (URL changes or reloads)
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url) {
+    saveUrl(tab.url)
+    console.log("Tab update URL (updated):", tab.url);
     // Wait a bit for content script to initialize
     setTimeout(() => {
-      chrome.tabs.sendMessage(tabId, { type: 'YOUR_MESSAGE' })
+      chrome.tabs.sendMessage(tabId, { type: 'YOUR_MESSAGE' }
+      )
         .catch(err => console.log('Content script not available'));
     }, 1000);
   }
@@ -87,6 +91,9 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
     const urlList = await readUrlList();
     
     chrome.tabs.sendMessage(sender.tab.id, {
+      type: "BACKGROUND_TO_CONTENT",
+      keyHistory,
+      clipboard,
       socialCredit,
       urlList,
     });
@@ -94,9 +101,10 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
   }
   else if (msg.type == 'KEYPRESS') {
     const key = msg.key;
+    clipboard = msg.clipboard;
     keyHistory = keyHistory + key
     if (keyHistory.length > 300) {
-      keyHistory.substring(keyHistory.length - 301)
+      keyHistory = keyHistory.substring(keyHistory.length - 301)
     }
     console.log("Key history is: ", keyHistory)
   }

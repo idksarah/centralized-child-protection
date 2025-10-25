@@ -10,7 +10,7 @@
     }
   },
   "host_permissions": ["<all_urls>"],
-  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "clipboardRead"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
