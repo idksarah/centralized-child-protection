@@ -1,11 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-	
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <title>Storage Demo</title>
+        <style>
+            body {
+                width: 220px;
+                font-family: sans-serif;
+                padding: 10px;
+            }
+            input {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+            button {
+                width: 100%;
+                padding: 5px;
+            }
+            p {
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Save Something</h3>
+        <input id="numberInput" type="number" placeholder="Type something..." />
+        <button id="saveBtn">Save</button>
+        <hr />
+        <p><strong>Stored Value:</strong></p>
+        <p id="status">Nothing saved yet.</p>
+        
+        <button id="readBtn">Read Storage</button>
+        <p id="output">The value stored:</p>
+        
+        <script src="popup.js"></script>
+    </body>
 </html>
