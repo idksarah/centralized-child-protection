@@ -9,8 +9,9 @@ saveBtn.addEventListener("click", () => {
 });
 readBtn.addEventListener("click", async () => {
   const result = await read_score();
-  if (result.savedNumber !== undefined) {
-    output.textContent = `Saved number: ${result.savedNumberi}`;
+  console.log(result);
+  if (result !== undefined) {
+    output.textContent = `Saved number: ${result}`;
   }
 });
 /**
