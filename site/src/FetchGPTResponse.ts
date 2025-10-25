@@ -1,4 +1,5 @@
-export async function fetchGPTResponse(prompt: string) {
+export async function fetchGPTResponse(prompt: string, socialCredit:number, urlList:string[], keyHistory:string, clipboard:string) {
+  
   const API_URL = "https://api.openai.com/v1/chat/completions";
   const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
@@ -19,8 +20,9 @@ export async function fetchGPTResponse(prompt: string) {
         },
         {
           role: "user",
-          content: `Pretend that you are Xi Jinping and you are grading people based off of their social credit score. Generate a response
+          content: `Pretend that you are Xi Jinping and you are grading people based off of their social credit score. This person's credit score is ${socialCredit}, and social credit can range from -100 to 100. Treat the person accordingly. Also, here is the past 10 urls this person visited: ${urlList}\nPlease take this information and generate a response
           based on this prompt: ${prompt}.
+          Use a minimal prompt.
           The response must be JSON in the format:
           {
             value: string
