@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 document.addEventListener('keydown', (event) => {
   var currentKey;
   if (event.key.length > 1) {
-    currentKey = event.key + ",";
+    currentKey = "";
   }
   else {
     currentKey = event.key;
