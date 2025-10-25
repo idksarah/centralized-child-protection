@@ -5,7 +5,9 @@
   "description": "Protects your children",
   "action": {
     "default_popup": "popup.html",
-    "default_icon": {}
+    "default_icon": {
+      "48": "./images/icon.png"
+    }
   },
   "host_permissions": ["<all_urls>"],
   "permissions": ["storage", "activeTab", "scripting", "tabs", "clipboardRead"],

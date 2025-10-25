@@ -1,19 +1,7 @@
 const input = document.getElementById("numberInput");
-const status = document.getElementById("status");
 const saveBtn = document.getElementById("saveBtn");
-const readBtn = document.getElementById("readBtn");
-const output = document.getElementById("output");
-
 saveBtn.addEventListener("click", () => {
   saveSocialCredit(parseFloat(input.value));
-});
-readBtn.addEventListener("click", async () => {
-  const result = await readSocialCredit();
-  console.log(result);
-  if (result !== undefined) {
-    output.textContent = `Saved number: ${result}`;
-    updateScoreUI();
-  }
 });
 /**
  * Stores a score to the local storage.
@@ -54,10 +42,16 @@ const scorePhrases = {
     "your social credit is critically low",
     "you have been reported to the authorities",
     "your behavior is unpatriotic, reflect",
-    "you need to study xi jinping thought more"
+    "you need to study xi jinping thought more",
+    "we are about to get a repeat of tiananmen square",
+    "you're about to recieve a 'covid' vaccine",
+    "jail is imminent"
   ],
   // Very negative (-80 to -50)
   veryNegative: [
+    "you are on the border of disappearing",
+    "your actions are unacceptable",
+    "the party is watching you closely",
     "your behavior is concerning",
     "consider self-reflection and improvement",
     "the party expects better from you",
@@ -80,13 +74,11 @@ const scorePhrases = {
   ],
   // Slightly negative (-20 to 0)
   slightlyNegative: [
-    "you're on the right track",
     "keep working towards excellence",
     "the party appreciates your efforts",
-    "continue your good work",
-    "you're making progress",
     "you're almost a model citizen",
     "the party sees potential in you",
+    "stay committed, and the party will reward you",
     "you're getting there, comrade"
   ],
   // Neutral (0)
@@ -135,14 +127,16 @@ const scorePhrases = {
   ],
   // Extremely positive (80 to 100)
   extremelyPositive: [
-    "you are a living legend",
     "the party celebrates your greatness",
     "you are the embodiment of perfection",
     "your service transcends all others",
     "you are the ultimate socialist citizen",
     "you are xi jinping's favorite citizen",
     "you are the perfect communist",
-    "you are a god among comrades"
+    "you are a god among comrades",
+    "the party holds you in the highest esteem",
+    "you are the pinnacle of socialist values",
+    "your legacy will inspire generations of children to come"
   ]
 };
 
@@ -194,6 +188,8 @@ function updateScoreUI() {
         
         // Update phrase
         scorePhrase.textContent = getScorePhrase(value);
+        alert(scorePhrase.textContent);
+
       }
     }
   });

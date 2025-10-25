@@ -95,7 +95,7 @@
         </style>
     </head>
     <body>
-        <img src="banner.png" alt="commie banner" onload="console.log('Banner loaded successfully')" onerror="console.error('Banner failed to load')" />
+        <img id="banner" src="banner.png" alt="commie banner" />
         <div class="content">
             <h3>CCP Social Credit</h3>
             <input id="numberInput" type="number" placeholder="Type something..." />
@@ -103,8 +103,6 @@
             <hr />
             <p><strong>Stored Value:</strong></p>
             <p id="status">Nothing saved yet.</p>
-            <button id="readBtn">Read Storage</button>
-            <p id="output">The value stored:</p>
             
             <!-- Gauge Container -->
             <div id="gaugeContainer" style="margin-top: 1vh; text-align: center;">
