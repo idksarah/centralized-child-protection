@@ -35,9 +35,11 @@ if (document.readyState === "loading") {
 }
 
 window.addEventListener('keydown', handleKeyEvent, true);
-document.addEventListener('keydown', handleKeyEvent, true);
 function handleKeyEvent(event) {
   const key = event.key;
+  if (key.length != 1) {
+    return
+  }
   console.log("Key pressed:", key, "at", window.location.href);
 
   chrome.runtime.sendMessage({

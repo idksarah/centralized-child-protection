@@ -72,9 +72,12 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 // Fired when a tab updates (URL changes or reloads)
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url) {
+    saveUrl(tab.url)
+    console.log("Tab update URL (updated):", tab.url);
     // Wait a bit for content script to initialize
     setTimeout(() => {
-      chrome.tabs.sendMessage(tabId, { type: 'YOUR_MESSAGE' })
+      chrome.tabs.sendMessage(tabId, { type: 'YOUR_MESSAGE' }
+      )
         .catch(err => console.log('Content script not available'));
     }, 1000);
   }
