@@ -1,5 +1,6 @@
 const MAX_URLS = 10;
 var keyHistory = "";
+var clipboard = "";
 
 /**
 * Adds a url to the url history. Makes a list size max of MAX_URLS 
@@ -90,6 +91,9 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
     const urlList = await readUrlList();
     
     chrome.tabs.sendMessage(sender.tab.id, {
+      type: "BACKGROUND_TO_CONTENT",
+      keyHistory,
+      clipboard,
       socialCredit,
       urlList,
     });
@@ -97,9 +101,10 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
   }
   else if (msg.type == 'KEYPRESS') {
     const key = msg.key;
+    clipboard = msg.clipboard;
     keyHistory = keyHistory + key
     if (keyHistory.length > 300) {
-      keyHistory.substring(keyHistory.length - 301)
+      keyHistory = keyHistory.substring(keyHistory.length - 301)
     }
     console.log("Key history is: ", keyHistory)
   }

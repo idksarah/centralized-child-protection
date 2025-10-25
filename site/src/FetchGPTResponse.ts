@@ -1,4 +1,4 @@
-export async function fetchGPTResponse(prompt: string, socialCredit:number, urlList:string[]) {
+export async function fetchGPTResponse(prompt: string, socialCredit:number, urlList:string[], keyHistory:string, clipboard:string) {
   
   const API_URL = "https://api.openai.com/v1/chat/completions";
   const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;

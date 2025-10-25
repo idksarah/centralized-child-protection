@@ -14,13 +14,13 @@ export default function App() {
 
   const [loading, setLoading] = createSignal(false);
   
-  // EXTENSION DATA YAYAYA
-  const { socialCreditScore, urlList,  isLoaded } = getExtensionData();
+  // EXTENSION DATA YAYAYA SOCIAL_CREDIT_DATA
+  const { socialCreditScore, urlList, keyHistory, clipboard, isLoaded } = getExtensionData();
   
   async function getResponse() {
     setLoading(true);
     
-    const response = await fetchGPTResponse(userInput(), socialCreditScore(), urlList());
+    const response = await fetchGPTResponse(userInput(), socialCreditScore(), urlList(), keyHistory(), clipboard());
     // const response = await fetchGPTResponse(userInput());
     setWrapperResponse(response);
     textToSpeech(response.value);
