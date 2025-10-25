@@ -6,47 +6,103 @@
         <title>Document</title>
         <title>Storage Demo</title>
         <style>
-            body {
+            html, body {
                 width: 100vw;
                 max-width: 500px;
-                font-family: sans-serif;
+                font-family: 'Futura', 'Futura PT', 'Futura Std', sans-serif;
                 padding: 0;
                 margin: 0;
+                background: linear-gradient(135deg, #ffaeae 0%, #bb9f9f 100%);
                 border: 2px solid #941d12;
+                overflow: hidden;
             }
             .content {
-                padding: 7vh;
+                padding: 20px;
+                height: calc(100vh - 40px);
+                overflow: hidden;
+                background: rgba(255, 255, 255, 0.7);
+                backdrop-filter: blur(10px);
+                border-radius: 15px;
+                margin: 10px;
             }
             img {
                 width: 100%;
                 height: auto;
                 display: block;
-                margin: 0;
+                margin: 0 0 20px 0;
                 padding: 0;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             }
             input {
-                width: 100%;
-                margin-bottom: 8px;
+                width: calc(100% - 32px);
+                padding: 12px 16px;
+                margin-bottom: 12px;
+                border: 2px solid rgba(148, 29, 18, 0.3);
+                border-radius: 8px;
+                background: rgba(255, 194, 194, 0.4);
+                color: rgb(0, 0, 0);
+                font-size: 16px;
+                transition: border-color 0.2s ease;
+                box-sizing: border-box;
+            }
+            input:focus {
+                outline: none;
+                border-color: #941d12;
+                background: rgba(252, 236, 236, 0.6);
+            }
+            input::placeholder {
+                color: rgba(50, 31, 31, 0.694);
             }
             button {
                 width: 100%;
-                padding: 5px;
+                padding: 12px 16px;
+                margin-bottom: 12px;
+                background: #941d12;
+                color: rgb(255, 255, 255);
+                border: none;
+                border-radius: 6px;
+                font-family: 'Futura', 'Futura PT', 'Futura Std', sans-serif;
+                font-weight: bold;
+                font-size: 14px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+            button:hover {
+                background: #b91c1c;
+            }
+            button:active {
+                background: #7f1d1d;
             }
             p {
                 font-size: 14px;
+                color: rgba(41, 34, 34, 0.9);
+                margin: 8px 0;
+            }
+            h3 {
+                color: rgb(0, 0, 0);
+                font-size: 20px;
+                font-weight: 700;
+                margin: 0 0 20px 0;
+                text-align: center;
+            }
+            hr {
+                border: none;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(148, 29, 18, 0.5), transparent);
+                margin: 20px 0;
             }
         </style>
     </head>
     <body>
         <img src="banner.png" alt="commie banner" onload="console.log('Banner loaded successfully')" onerror="console.error('Banner failed to load')" />
         <div class="content">
-            <h3>Save Something</h3>
+            <h3>CCP Social Credit</h3>
             <input id="numberInput" type="number" placeholder="Type something..." />
             <button id="saveBtn">Save</button>
             <hr />
             <p><strong>Stored Value:</strong></p>
             <p id="status">Nothing saved yet.</p>
-            
             <button id="readBtn">Read Storage</button>
             <p id="output">The value stored:</p>
             
@@ -110,9 +166,13 @@
                 max-height: 100px;
                 margin: 0 auto;
                 position: relative;
-                background: #f0f0f0;
+                background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
                 border-radius: 50vw 50vw 0 0;
                 overflow: hidden;
+                box-shadow: 
+                  inset 0 4px 8px rgba(0,0,0,0.3),
+                  0 8px 16px rgba(0,0,0,0.2);
+                border: 2px solid #444;
               ">
                 <!-- bg background -->
                 <div style="
@@ -121,7 +181,30 @@
                   left: 0;
                   width: 100%;
                   height: 100%;
-                  background: linear-gradient(90deg, #d42c00 0%, #f0f0f0 50%, #a20161 100%);
+                  background: 
+                    radial-gradient(circle at 20% 80%, rgba(148, 29, 18, 0.8) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(148, 29, 18, 0.6) 0%, transparent 50%),
+                    linear-gradient(90deg, #941d12 0%, #dc2626 25%, #f0f0f0 50%, #b91c1c 75%, #7f1d1d 100%);
+                  border-radius: 50vw 50vw 0 0;
+                "></div>
+                
+                <!-- gauge ticks -->
+                <div style="
+                  position: absolute;
+                  bottom: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  background: 
+                    repeating-linear-gradient(
+                      0deg,
+                      transparent 0px,
+                      transparent 8px,
+                      rgba(255,255,255,0.1) 8px,
+                      rgba(255,255,255,0.1) 9px,
+                      transparent 9px,
+                      transparent 16px
+                    );
                   border-radius: 50vw 50vw 0 0;
                 "></div>
                 
@@ -130,37 +213,56 @@
                   position: absolute;
                   bottom: 0;
                   left: 50%;
-                  width: 0.2vw;
-                  min-width: 2px;
-                  height: 30vw;
-                  max-height: 60px;
-                  background: #333;
+                  width: 0.3vw;
+                  min-width: 3px;
+                  height: 35vw;
+                  max-height: 70px;
+                  background: linear-gradient(180deg, #ffd700 0%, #ffed4e 50%, #ff6b35 100%);
                   transform-origin: bottom center;
                   transform: translateX(-50%) rotate(0deg);
-                  transition: transform 0.3s ease;
+                  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
                   z-index: 3;
+                  border-radius: 1.5px 1.5px 0 0;
+                  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
                 "></div>
                 
-                <!-- dot -->
+                <!-- center dot -->
                 <div style="
                   position: absolute;
                   bottom: 0;
                   left: 50%;
-                  width: 0.8vw;
-                  min-width: 8px;
-                  height: 0.8vw;
-                  min-height: 8px;
-                  background: #333;
+                  width: 1.2vw;
+                  min-width: 12px;
+                  height: 1.2vw;
+                  min-height: 12px;
+                  background: radial-gradient(circle, #ffd700 0%, #ff6b35 70%, #333 100%);
                   border-radius: 50%;
                   transform: translate(-50%, 50%);
                   z-index: 4;
+                  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+                  border: 2px solid #fff;
                 "></div>
               </div>
               <div id="gaugeLabel" style="
                 font-size: max(1.2vw, 12px);
-                color: #666;
-                margin-top: 0.5vh;
-              ">Score: 0.0 (Range: -10 to 10)</div>
+                color: rgba(60, 33, 33, 0.8);
+                margin-top: 15px;
+                text-align: center;
+                font-weight: 500;
+              ">Score: 0.0 (Range: -100 to 100)</div>
+              
+              <div id="scorePhrase" style="
+                font-size: max(1.4vw, 14px);
+                color: rgba(67, 50, 50, 0.9);
+                margin-top: 10px;
+                text-align: center;
+                font-weight: 600;
+                font-style: italic;
+                padding: 8px 12px;
+                background: rgba(148, 29, 18, 0.2);
+                border-radius: 6px;
+                border-left: 3px solid #941d12;
+              ">Enter a score to see your status</div>
             </div>
         </div>
         
