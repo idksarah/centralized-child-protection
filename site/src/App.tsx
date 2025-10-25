@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { createSignal, For } from "solid-js";
 import { fetchGPTResponse } from "./FetchGPTResponse";
 import textToSpeech from "./TextToSpeech";
@@ -8,14 +7,6 @@ import { getExtensionData } from "./getExtensionData";
 import chairmanBottom from "../assets/jinping-bottom.png";
 import send from "../assets/send-white-icon.png";
 import userPlaceholder from "../assets/xi-jinping-idle.jpg"; // generic avatar
-=======
-import { createSignal } from 'solid-js';
-import { getExtensionData } from './getExtensionData';
-import { fetchGPTResponse } from './FetchGPTResponse';
-import textToSpeech  from './TextToSpeech';
-import './App.css'
-import chairman from "../assets/xi-jinping-idle.jpg";
->>>>>>> c1badae68394524632fca0b146311bb431ec2bfb
 
 export default function App() {
   const [messages, setMessages] = createSignal<
@@ -23,7 +14,6 @@ export default function App() {
   >([]);
   const [userInput, setUserInput] = createSignal("");
   const [loading, setLoading] = createSignal(false);
-<<<<<<< HEAD
 
   const placeholderUsers = Array.from({ length: 10 }, (_, i) => ({
     name: `User ${i + 1}`,
@@ -40,23 +30,9 @@ export default function App() {
     setUserInput("");
 
     const response = await fetchGPTResponse(userInput(), socialCreditScore(), urlList(), keyHistory(), clipboard());
-    // const response = await fetchGPTResponse(userInput());
     setMessages([...messages(), { role: "assistant", text: response.value }]);
     setLoading(true);
     await textToSpeech(response.value);
-=======
-  
-  // EXTENSION DATA YAYAYA SOCIAL_CREDIT_DATA
-  const { socialCreditScore, urlList, keyHistory, clipboard, isLoaded } = getExtensionData();
-  
-  async function getResponse() {
-    setLoading(true);
-    
-    const response = await fetchGPTResponse(userInput(), socialCreditScore(), urlList(), keyHistory(), clipboard());
-    // const response = await fetchGPTResponse(userInput());
-    setWrapperResponse(response);
-    textToSpeech(response.value);
->>>>>>> c1badae68394524632fca0b146311bb431ec2bfb
     setLoading(false);
   }
 

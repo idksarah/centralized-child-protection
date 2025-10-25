@@ -1,8 +1,4 @@
 /site/node_modules
-<<<<<<< HEAD
 /site/*
 node_modules/
 .DS_STORE
-=======
-/site/*
->>>>>>> c1badae68394524632fca0b146311bb431ec2bfb
