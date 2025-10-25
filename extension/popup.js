@@ -1,19 +1,8 @@
 const input = document.getElementById("numberInput");
 const status = document.getElementById("status");
 const saveBtn = document.getElementById("saveBtn");
-const readBtn = document.getElementById("readBtn");
-const output = document.getElementById("output");
-
 saveBtn.addEventListener("click", () => {
   saveSocialCredit(parseFloat(input.value));
-});
-readBtn.addEventListener("click", async () => {
-  const result = await readSocialCredit();
-  console.log(result);
-  if (result !== undefined) {
-    output.textContent = `Saved number: ${result}`;
-    updateScoreUI();
-  }
 });
 /**
  * Stores a score to the local storage.
