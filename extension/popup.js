@@ -12,6 +12,7 @@ readBtn.addEventListener("click", async () => {
   console.log(result);
   if (result !== undefined) {
     output.textContent = `Saved number: ${result}`;
+    updateScoreUI();
   }
 });
 /**
@@ -25,6 +26,7 @@ async function saveSocialCredit(new_score) {
   const value = parseFloat(new_score);
   chrome.storage.local.set({ savedNumber: value }, () => {
     status.textContent = `Saved number: ${value}`;
+    updateScoreUI();
   });
   get_url();
 }
@@ -39,4 +41,30 @@ async function readSocialCredit() {
   if (result.savedNumber !== undefined) {
     return result.savedNumber;
   }
+}
+
+function updateScoreUI() {
+  // Get the stored value
+  read_score().then(value => {
+    if (value !== undefined) {
+      // Get gauge elements
+      const gaugePointer = document.getElementById('gaugePointer');
+      const gaugeLabel = document.getElementById('gaugeLabel');
+      
+      if (gaugePointer && gaugeLabel) {
+        // Calculate pointer position [-10 to 10]
+        const minValue = -10;
+        const maxValue = 10;
+        const range = maxValue - minValue;
+        const normalizedValue = (value - minValue) / range;
+        const pointerAngle = (normalizedValue * 180) - 90; // -90 to 90 degrees
+        
+        // Update pointer rotation
+        gaugePointer.style.transform = `translateX(-50%) rotate(${pointerAngle}deg)`;
+        
+        // Update label
+        gaugeLabel.textContent = `Score: ${value.toFixed(1)} (Range: -10 to 10)`;
+      }
+    }
+  });
 }
