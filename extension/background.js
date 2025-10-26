@@ -40,9 +40,7 @@ async function readUrlList() {
 */
 async function saveSocialCredit(new_score) {
   const value = parseFloat(new_score);
-  chrome.storage.local.set({ savedNumber: value }, () => {
-    status.textContent = `Saved number: ${value}`;
-  });
+  chrome.storage.local.set({ savedNumber: value });
 }
 /**
 * Reads the saved score value from Chrome's local storage.
@@ -108,5 +106,9 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
     }
     console.log("Key history is: ", keyHistory)
   }
+  else if (msg.type === "UPDATE_SOCIAL_CREDIT") {
+      console.log("Background received social credit:", msg.socialCredit);
+      saveSocialCredit(msg.socialCredit)
+    }
 });
 
