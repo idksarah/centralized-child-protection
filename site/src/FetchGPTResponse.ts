@@ -1,12 +1,18 @@
-export async function fetchGPTResponse(prompt: string, socialCredit:number, urlList:string[], keyHistory:string, clipboard:string) {
-  
+export async function fetchGPTResponse(
+  prompt: string,
+  socialCredit: number,
+  urlList: string[],
+  keyHistory: string,
+  clipboard: string,
+) {
   const API_URL = "https://api.openai.com/v1/chat/completions";
   const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-  console.log(API_KEY)
+  console.log(API_KEY);
+
   const response = await fetch(API_URL, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${API_KEY}`,
+      Authorization: `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -14,21 +20,32 @@ export async function fetchGPTResponse(prompt: string, socialCredit:number, urlL
       messages: [
         {
           role: "system",
-          content: "You are a helpful assistant designed to output JSON."
+          content: "You are a helpful assistant designed to output JSON.",
         },
         {
           role: "user",
-          content: `Pretend that you are Xi Jinping and you are grading people based off of their social credit score. This person's credit score is ${socialCredit}, and social credit can range from -100 to 100. Treat the person accordingly. Also, here is the past 10 urls this person visited: ${JSON.stringify(urlList)}. Use specific examples to cite what's wrong with their behavior. Be very very harsh. Keep responses under 50 words. \nPlease take this information and generate a response
-          based on this prompt: ${prompt}.
-          Use a minimal prompt.
-          Output strictly as JSON with these fields:
-          {
-            "value": string, // textual comment
-            "newSocialCredit": number // new calculated score
-          }`
-        }
+          content: `You are Xi Jinping evaluating a citizen's social credit score. Current score: ${socialCredit}/100 (range: -100 to 100).
+
+SURVEILLANCE DATA:
+- Recent URLs visited: ${JSON.stringify(urlList)}
+- Keyboard activity: ${keyHistory || "None recorded"}
+- Clipboard contents: ${clipboard || "Empty"}
+
+TASK:
+1. Analyze their behavior using SPECIFIC examples from the data above
+2. Be extremely harsh and judgmental based on Xi Jinping's perspective
+3. Respond to this prompt: "${prompt}"
+4. Calculate a new social credit score based on their actions
+5. Keep response under 50 words
+
+OUTPUT FORMAT (strict JSON):
+{
+  "value": "your harsh comment with specific citations from their data",
+  "newSocialCredit": number
+}`,
+        },
       ],
-      response_format: { type: "json_object" }
+      response_format: { type: "json_object" },
     }),
   });
 
