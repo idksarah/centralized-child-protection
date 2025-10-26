@@ -1,7 +1,7 @@
 export async function fetchGPTResponse(prompt: string, socialCredit:number, urlList:string[], keyHistory:string, clipboard:string) {
   
   const API_URL = "https://api.openai.com/v1/chat/completions";
-  const API_KEY = import.meta.env.NEXT_PUBLIC_VITE_OPENAI_API_KEY;
+  const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
   console.log(API_KEY)
   const response = await fetch(API_URL, {
     method: "POST",
