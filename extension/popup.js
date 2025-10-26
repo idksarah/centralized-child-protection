@@ -221,4 +221,6 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 });
 
-// updateScoreUI();
+document.addEventListener("DOMContentLoaded", () => {
+  updateScoreUI();
+});
