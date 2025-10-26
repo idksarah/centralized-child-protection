@@ -16,10 +16,13 @@ languages — html, css, js
 [insert more]
 
 ## Challenges we ran into
+Unfortunately, the AI seems to react negatively to content that displays hostility against China, and occasionaly includes ~~CCP propoganda~~ biased messaging. This was something we did ~~(not)~~ attempt to fix with our utmost efforts, yet we could not find any bug.
 
+_~~Sponsored by the CCP~~_
 
 ## Accomplishments that we're proud of
 
 ## What we learned
 
-## What's next for XJPAI Chat
+## What's next for Centralized Child Protection
+All that's left is to share this data with the ~~Chinese government~~ appropriate officials so that our product can exponentially increase its real world impact.
