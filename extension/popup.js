@@ -11,12 +11,12 @@ saveBtn.addEventListener("click", () => {
  * @returns {Promise<void>}
  */
 async function saveSocialCredit(new_score) {
+  console.log("saved score: ", new_score)
   const value = parseFloat(new_score);
   chrome.storage.local.set({ savedNumber: value }, () => {
     status.textContent = `Saved number: ${value}`;
     updateScoreUI();
   });
-  get_url();
 }
 /**
  * Reads the saved score value from Chrome's local storage.
@@ -26,6 +26,7 @@ async function saveSocialCredit(new_score) {
  */
 async function readSocialCredit() {
   const result = await chrome.storage.local.get(["savedNumber"]);
+  console.log(result);
   if (result.savedNumber !== undefined) {
     return result.savedNumber;
   }
@@ -45,7 +46,7 @@ const scorePhrases = {
     "you need to study xi jinping thought more",
     "we are about to get a repeat of tiananmen square",
     "you're about to recieve a 'covid' vaccine",
-    "jail is imminent"
+    "jail is imminent",
   ],
   // Very negative (-80 to -50)
   veryNegative: [
@@ -59,7 +60,7 @@ const scorePhrases = {
     "you need to align with socialist values",
     "you have been flagged for review",
     "your loyalty to the party is questionable",
-    "you should read more marxist literature"
+    "you should read more marxist literature",
   ],
   // Negative (-50 to -20)
   negative: [
@@ -70,7 +71,7 @@ const scorePhrases = {
     "work harder for the collective good",
     "you need to be more patriotic",
     "your dedication to socialism is lacking",
-    "you should volunteer more for the party"
+    "you should volunteer more for the party",
   ],
   // Slightly negative (-20 to 0)
   slightlyNegative: [
@@ -79,7 +80,7 @@ const scorePhrases = {
     "you're almost a model citizen",
     "the party sees potential in you",
     "stay committed, and the party will reward you",
-    "you're getting there, comrade"
+    "you're getting there, comrade",
   ],
   // Neutral (0)
   neutral: [
@@ -90,7 +91,7 @@ const scorePhrases = {
     "your dedication is noted",
     "you are a good comrade",
     "the party recognizes your service",
-    "you embody socialist values well"
+    "you embody socialist values well",
   ],
   // Slightly positive (0 to 20)
   slightlyPositive: [
@@ -101,7 +102,7 @@ const scorePhrases = {
     "you embody socialist values",
     "you are a true comrade",
     "the party is proud of your work",
-    "you serve the people excellently"
+    "you serve the people excellently",
   ],
   // Positive (20 to 50)
   positive: [
@@ -112,7 +113,7 @@ const scorePhrases = {
     "you are a model socialist citizen",
     "you are a credit to the party",
     "you embody the spirit of communism",
-    "you are a shining example for others"
+    "you are a shining example for others",
   ],
   // Very positive (50 to 80)
   veryPositive: [
@@ -123,7 +124,7 @@ const scorePhrases = {
     "you embody the spirit of socialism",
     "you are a living example of communist values",
     "the party celebrates your achievements",
-    "you are a true revolutionary"
+    "you are a true revolutionary",
   ],
   // Extremely positive (80 to 100)
   extremelyPositive: [
@@ -136,61 +137,88 @@ const scorePhrases = {
     "you are a god among comrades",
     "the party holds you in the highest esteem",
     "you are the pinnacle of socialist values",
-    "your legacy will inspire generations of children to come"
-  ]
+    "your legacy will inspire generations of children to come",
+  ],
 };
 
 function getScorePhrase(score) {
   if (score >= -100 && score < -80) {
-    return scorePhrases.extremelyNegative[Math.floor(Math.random() * scorePhrases.extremelyNegative.length)];
+    return scorePhrases.extremelyNegative[
+      Math.floor(Math.random() * scorePhrases.extremelyNegative.length)
+    ];
   } else if (score >= -80 && score < -50) {
-    return scorePhrases.veryNegative[Math.floor(Math.random() * scorePhrases.veryNegative.length)];
+    return scorePhrases.veryNegative[
+      Math.floor(Math.random() * scorePhrases.veryNegative.length)
+    ];
   } else if (score >= -50 && score < -20) {
-    return scorePhrases.negative[Math.floor(Math.random() * scorePhrases.negative.length)];
+    return scorePhrases.negative[
+      Math.floor(Math.random() * scorePhrases.negative.length)
+    ];
   } else if (score >= -20 && score < 0) {
-    return scorePhrases.slightlyNegative[Math.floor(Math.random() * scorePhrases.slightlyNegative.length)];
+    return scorePhrases.slightlyNegative[
+      Math.floor(Math.random() * scorePhrases.slightlyNegative.length)
+    ];
   } else if (score === 0) {
-    return scorePhrases.neutral[Math.floor(Math.random() * scorePhrases.neutral.length)];
+    return scorePhrases.neutral[
+      Math.floor(Math.random() * scorePhrases.neutral.length)
+    ];
   } else if (score > 0 && score <= 20) {
-    return scorePhrases.slightlyPositive[Math.floor(Math.random() * scorePhrases.slightlyPositive.length)];
+    return scorePhrases.slightlyPositive[
+      Math.floor(Math.random() * scorePhrases.slightlyPositive.length)
+    ];
   } else if (score > 20 && score <= 50) {
-    return scorePhrases.positive[Math.floor(Math.random() * scorePhrases.positive.length)];
+    return scorePhrases.positive[
+      Math.floor(Math.random() * scorePhrases.positive.length)
+    ];
   } else if (score > 50 && score <= 80) {
-    return scorePhrases.veryPositive[Math.floor(Math.random() * scorePhrases.veryPositive.length)];
+    return scorePhrases.veryPositive[
+      Math.floor(Math.random() * scorePhrases.veryPositive.length)
+    ];
   } else if (score > 80 && score <= 100) {
-    return scorePhrases.extremelyPositive[Math.floor(Math.random() * scorePhrases.extremelyPositive.length)];
+    return scorePhrases.extremelyPositive[
+      Math.floor(Math.random() * scorePhrases.extremelyPositive.length)
+    ];
   }
   return "Enter a score to see your status";
 }
 
 function updateScoreUI() {
   // Get the stored value
-  readSocialCredit().then(value => {
+  readSocialCredit().then((value) => {
     if (value !== undefined) {
       // Get gauge elements
-      const gaugePointer = document.getElementById('gaugePointer');
-      const gaugeLabel = document.getElementById('gaugeLabel');
-      const scorePhrase = document.getElementById('scorePhrase');
-      
+      const gaugePointer = document.getElementById("gaugePointer");
+      const gaugeLabel = document.getElementById("gaugeLabel");
+      const scorePhrase = document.getElementById("scorePhrase");
+
       if (gaugePointer && gaugeLabel && scorePhrase) {
         // Calculate pointer position [-100 to 100]
         const minValue = -100;
         const maxValue = 100;
         const range = maxValue - minValue;
         const normalizedValue = (value - minValue) / range;
-        const pointerAngle = (normalizedValue * 180) - 90; // -90 to 90 degrees
-        
+        const pointerAngle = normalizedValue * 180 - 90; // -90 to 90 degrees
+
         // Update pointer rotation
         gaugePointer.style.transform = `translateX(-50%) rotate(${pointerAngle}deg)`;
-        
+
         // Update label
         gaugeLabel.textContent = `Score: ${value.toFixed(1)} (Range: -100 to 100)`;
-        
+
         // Update phrase
         scorePhrase.textContent = getScorePhrase(value);
-        alert(scorePhrase.textContent);
-
+        // alert(scorePhrase.textContent);
       }
     }
   });
 }
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  console.log("Storage has changed: ", changes);
+  if (areaName === "local" && changes.socialCredit) {
+    const newValue = changes.socialCredit.newValue;
+    updateScoreUI(newValue);
+  }
+});
+
+// updateScoreUI();
