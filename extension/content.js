@@ -67,5 +67,7 @@ window.addEventListener("message", (event) => {
     } catch (e) {
       console.warn("Extension context invalidated, message not sent:", e);
     }
+  } else if (event.data?.type === "REQUEST_SOCIAL_CREDIT_DATA") {
+    chrome.runtime.sendMessage({ type:"REQUEST_SOCIAL_CREDIT_DATA" });
   }
 });

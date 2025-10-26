@@ -10,6 +10,7 @@ import send from "../assets/send-white-icon.png";
 import userPlaceholder from "../assets/xi-jinping-idle.jpg"; // generic avatar
 
 export default function App() {
+  let isFirst = true;
   const [messages, setMessages] = createSignal<
     { role: "user" | "assistant"; text: string }[]
   >([]);
@@ -22,9 +23,6 @@ export default function App() {
     name: `User ${i + 1}`,
     message: "Recent message...",
   }));
-
-  const { socialCreditScore, urlList, keyHistory, clipboard, isLoaded } =
-    getExtensionData();
 
   async function getResponse() {
     const input = userInput().trim();
@@ -42,6 +40,8 @@ export default function App() {
     let newSocialCredit: number | null = null;
 
     try {
+      const { socialCreditScore, urlList, keyHistory, clipboard } = await getExtensionData(isFirst);
+      isFirst = false;
       const response = await fetchGPTResponse(
         input,
         socialCreditScore(),
