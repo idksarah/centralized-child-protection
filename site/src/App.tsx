@@ -45,7 +45,7 @@ export default function App() {
         clipboard(),
       );
 
-      responseValue = response.value;
+      responseValue = response.value + "Your new social credit is " + response.newSocialCredit;
       newSocialCredit = response.newSocialCredit;
       console.log("new social credit: ", newSocialCredit)
       window.postMessage(
