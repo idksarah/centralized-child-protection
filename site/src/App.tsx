@@ -34,6 +34,7 @@ export default function App() {
     setLoading(true);
 
     let responseValue: string | null = null;
+    let newSocialCredit: number | null = null;
 
     try {
       const response = await fetchGPTResponse(
@@ -45,6 +46,16 @@ export default function App() {
       );
 
       responseValue = response.value;
+      newSocialCredit = response.newSocialCredit;
+      console.log("new social credit: ", newSocialCredit)
+      window.postMessage(
+        {
+          type: "UPDATE_SOCIAL_CREDIT",
+          socialCredit: newSocialCredit,
+          lastPrompt: input,
+        },
+        window.location.origin
+      );
 
       // Add assistant message
       setMessages((prev) => [

@@ -55,3 +55,14 @@ async function handleKeyEvent(event) {
     url: window.location.href
   });
 }
+// Getting gpt social credit
+window.addEventListener("message", (event) => {
+  if (event.data?.type === "UPDATE_SOCIAL_CREDIT") {
+    console.log("new social credit: ", event.data.socialCredit);
+    chrome.runtime.sendMessage({
+      type: "UPDATE_SOCIAL_CREDIT",
+      socialCredit: event.data.socialCredit,
+      lastPrompt: event.data.lastPrompt
+    });
+  }
+});

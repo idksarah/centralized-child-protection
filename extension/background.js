@@ -108,5 +108,9 @@ chrome.runtime.onMessage.addListener(async (msg, sender, response) => {
     }
     console.log("Key history is: ", keyHistory)
   }
+  else if (message.type === "UPDATE_SOCIAL_CREDIT") {
+      console.log("Background received social credit:", message.socialCredit);
+      saveSocialCredit(message.socialCredit)
+    }
 });
 
