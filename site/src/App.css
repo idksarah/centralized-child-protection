@@ -75,7 +75,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #dedede;
+  background-color: #ebebeb;
 }
 
 #header {
@@ -148,7 +148,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem;
-  background-color: #dedede;
+  background-color: #ebebeb;
 }
 
 #input {
@@ -163,11 +163,11 @@
 }
 
 .send {
-  height: 2rem;
-  width: 2rem;
+  height: 1.5rem;
+  width: 1.5rem;
   background-color: #b70808;
   border-radius: 50%;
-  padding: 0.4rem;
+  padding: 0.67rem;
   cursor: pointer;
 }
 
@@ -186,7 +186,7 @@
   display: inline-block;
   font-size: 1.5rem;
   letter-spacing: 2px;
-  color: #888;
+  color: #bdbdbd;
   margin-left: 10px;
   animation: blink 1s infinite steps(3, start);
 }
@@ -203,4 +203,12 @@
   100% {
     content: "...";
   }
+}
+
+#title {
+  height: .8em;
+  text-align: center ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

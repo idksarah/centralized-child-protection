@@ -4,7 +4,8 @@ import textToSpeech from "./TextToSpeech";
 import "./App.css";
 import chairmanTop from "../assets/jinping-top.png";
 import { getExtensionData } from "./getExtensionData";
-import chairmanBottom from "../assets/jinping-bottom.png";
+import chairmanIdle from "../assets/xi-jinping-main-1.png";
+import chairmanGif from "../assets/xi-jinping-wiggle-bobble.gif"
 import send from "../assets/send-white-icon.png";
 import userPlaceholder from "../assets/xi-jinping-idle.jpg"; // generic avatar
 
@@ -14,6 +15,8 @@ export default function App() {
   >([]);
   const [userInput, setUserInput] = createSignal("");
   const [loading, setLoading] = createSignal(false);
+  const [chairmanActive, setChairmanActive] = createSignal(false);
+
 
   const placeholderUsers = Array.from({ length: 10 }, (_, i) => ({
     name: `User ${i + 1}`,
@@ -25,15 +28,18 @@ export default function App() {
 
   async function getResponse() {
     const input = userInput().trim();
+    setUserInput("");
     if (!input) return;
 
     // Add user message
     setMessages((prev) => [...prev, { role: "user", text: input }]);
 
     // Show typing dots
+    setChairmanActive(true);
     setLoading(true);
 
     let responseValue: string | null = null;
+    let newSocialCredit: number | null = null;
 
     try {
       const response = await fetchGPTResponse(
@@ -44,7 +50,17 @@ export default function App() {
         clipboard(),
       );
 
-      responseValue = response.value;
+      responseValue = response.value + "Your new social credit is " + response.newSocialCredit;
+      newSocialCredit = response.newSocialCredit;
+      console.log("new social credit: ", newSocialCredit)
+      window.postMessage(
+        {
+          type: "UPDATE_SOCIAL_CREDIT",
+          socialCredit: newSocialCredit,
+          lastPrompt: input,
+        },
+        window.location.origin
+      );
 
       // Add assistant message
       setMessages((prev) => [
@@ -61,6 +77,7 @@ export default function App() {
     if (responseValue) {
       try {
         await textToSpeech(responseValue);
+        setChairmanActive(false);
       } catch (error) {
         console.error("TTS error:", error);
       }
@@ -97,7 +114,7 @@ export default function App() {
         <aside id="profile-sidebar">
           <img
             src={chairmanTop}
-            class={`avatar-main ${loading() ? "floating" : ""}`}
+            class={'avatar-main'}
             alt="profile"
           />
         </aside>
@@ -135,7 +152,7 @@ export default function App() {
                   >
                     {msg.role === "assistant" && (
                       <img
-                        src={chairmanBottom}
+                        src={chairmanActive() ? chairmanGif : chairmanIdle}
                         class="avatar"
                         alt="assistant avatar"
                       />
@@ -149,8 +166,8 @@ export default function App() {
                     </div>
                     {msg.role === "user" && (
                       <img
-                        src={userPlaceholder}
-                        class={`avatar ${loading() ? "floating" : ""}`}
+                        src={chairmanIdle}
+                        class={`avatar`}
                         alt="user avatar"
                       />
                     )}
@@ -160,7 +177,7 @@ export default function App() {
               {loading() && (
                 <div class="message-row assistant-row">
                   <img
-                    src={chairmanBottom}
+                    src={chairmanActive() ? chairmanGif : chairmanIdle}
                     class="avatar"
                     alt="assistant avatar"
                   />

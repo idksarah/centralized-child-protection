@@ -18,12 +18,13 @@ export async function fetchGPTResponse(prompt: string, socialCredit:number, urlL
         },
         {
           role: "user",
-          content: `Pretend that you are Xi Jinping and you are grading people based off of their social credit score. This person's credit score is ${socialCredit}, and social credit can range from -100 to 100. Treat the person accordingly. Also, here is the past 10 urls this person visited: ${urlList}\nPlease take this information and generate a response
+          content: `Pretend that you are Xi Jinping and you are grading people based off of their social credit score. This person's credit score is ${socialCredit}, and social credit can range from -100 to 100. Treat the person accordingly. Also, here is the past 10 urls this person visited: ${JSON.stringify(urlList)}. Use specific examples to cite what's wrong with their behavior. Be very very harsh. Keep responses under 50 words. \nPlease take this information and generate a response
           based on this prompt: ${prompt}.
           Use a minimal prompt.
-          The response must be JSON in the format:
+          Output strictly as JSON with these fields:
           {
-            value: string
+            "value": string, // textual comment
+            "newSocialCredit": number // new calculated score
           }`
         }
       ],
